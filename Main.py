@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from random import *
 
-color_set = ['white', 'black', 'orange']
+## white: free, black: wall, purple: start/goal, green: optimal path, blue: all visited, red: fire
+color_set = ['white', 'black', 'purple']
 range_set = np.array([-0.5, 0.5, 2.5, 4.5])
 
 def main():
