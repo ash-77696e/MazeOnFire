@@ -35,5 +35,5 @@ def generate_maze(dimension, density):
                 maze[x][y] = 1 # fill with wall
 
     return maze
-
+# test
 main()
