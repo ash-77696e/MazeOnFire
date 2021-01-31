@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from random import *
 from dfs import *
+from bfs import *
 
 ## white: free, black: wall, purple: start/goal, green: optimal path, blue: all visited, red: fire
 color_set = ['white', 'black', 'purple', 'blue', 'green']
@@ -17,7 +18,8 @@ def main():
     plt.figure(figsize = (8, 8))
     plt.axis('off')
     maze = generate_maze(dimension, density)
-    dfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    #dfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    bfs(maze, (0, 0), (dimension - 1, dimension - 1))
     #print(maze)
     plt.imshow(maze, cmap = cmap, norm = norm)
     plt.show()
