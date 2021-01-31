@@ -3,21 +3,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from random import *
+from dfs import *
 
 ## white: free, black: wall, purple: start/goal, green: optimal path, blue: all visited, red: fire
-color_set = ['white', 'black', 'purple']
-range_set = np.array([-0.5, 0.5, 2.5, 4.5])
+color_set = ['white', 'black', 'purple', 'blue', 'green']
+range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5])
 
 def main():
     dimension = int(sys.argv[1])
     density = float(sys.argv[2])
-    algorithm = sys.argv[3]
-    print(algorithm)
     cmap = colors.ListedColormap(color_set)
     norm = colors.BoundaryNorm(range_set, len(color_set))
     plt.figure(figsize = (8, 8))
     plt.axis('off')
     maze = generate_maze(dimension, density)
+    dfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    #print(maze)
     plt.imshow(maze, cmap = cmap, norm = norm)
     plt.show()
 
