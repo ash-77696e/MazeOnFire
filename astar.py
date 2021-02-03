@@ -28,23 +28,23 @@ def astar(maze, start, goal):
         curX, curY = current
 
         if curX + 1 < dimension and maze[curX + 1][curY] != 1 and (curX + 1, curY) not in closed_set:
-            if (curX + 1, curY) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX + 1, curY), goal), ((curX + 1, curY), 1 + distance)))
+            if (euclidean_distance((curX + 1, curY), goal) + distance + 1, ((curX + 1, curY), 1 + distance)) not in fringe:
+                heapq.heappush(fringe, (euclidean_distance((curX + 1, curY), goal) + distance + 1, ((curX + 1, curY), 1 + distance)))
                 prev[(curX + 1, curY)] = current
 
         if curY + 1 < dimension and maze[curX][curY + 1] != 1 and (curX, curY + 1) not in closed_set:
-            if (curX, curY + 1) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX, curY + 1), goal), ((curX, curY + 1), 1 + distance)))
+            if (euclidean_distance((curX, curY + 1), goal) + distance + 1, ((curX, curY + 1), 1 + distance)) not in fringe:
+                heapq.heappush(fringe, (euclidean_distance((curX, curY + 1), goal) + distance + 1, ((curX, curY + 1), 1 + distance)))
                 prev[(curX, curY + 1)] = current
 
         if curX - 1 >= 0 and maze[curX - 1][curY] != 1 and (curX - 1, curY) not in closed_set:
-            if (curX - 1, curY) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX - 1, curY), goal), ((curX - 1, curY), 1 + distance)))
+            if (euclidean_distance((curX - 1, curY), goal) + distance + 1, ((curX - 1, curY), 1 + distance)) not in fringe:
+                heapq.heappush(fringe, (euclidean_distance((curX - 1, curY), goal) + distance + 1, ((curX - 1, curY), 1 + distance)))
                 prev[(curX - 1, curY)] = current
         
         if curY - 1 >= 0 and maze[curX][curY - 1] != 1 and (curX, curY - 1) not in closed_set:
-            if (curX, curY - 1) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX, curY - 1), goal), ((curX, curY - 1), 1 + distance)))
+            if (euclidean_distance((curX, curY - 1), goal) + distance + 1, ((curX, curY - 1), 1 + distance)) not in fringe:
+                heapq.heappush(fringe, (euclidean_distance((curX, curY - 1), goal) + distance + 1, ((curX, curY - 1), 1 + distance)))
                 prev[(curX, curY - 1)] = current
         
         closed_set.append(current)
