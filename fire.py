@@ -9,7 +9,7 @@ def advance_fire_one_step(maze, q):
 
     for x in range(0, dimension):
         for y in range(0, dimension):
-            if maze[x][y] != 1 and maze[x][y] != 7 and maze[x][y] != 4:
+            if maze[x][y] != 1 and maze[x][y] != 7 and maze[x][y] != 4 and maze[x][y] != 3:
                 k = 0
                 if x - 1 >= 0:
                     if maze[x - 1][y] == 7:
@@ -73,7 +73,7 @@ def strategy_one(maze, fire, start, goal, q):
         elif curY - 1 >= 0 and (traversal_path[curX][curY - 1] == 6 or traversal_path[curX][curY - 1] == 4) and fire_maze[curX][curY - 1] != 6:
             curY = curY - 1
 
-        fire_maze = advance_fire_one_step(fire_maze, 0.7)
+        fire_maze = advance_fire_one_step(fire_maze, 0.2)
         
     print('Died')
     return fire_maze
