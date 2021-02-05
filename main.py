@@ -2,14 +2,15 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
+import time
 from random import *
 from dfs import *
 from bfs import *
 from astar import *
 
 ## white: free, black: wall, purple: start/goal, green: optimal path, blue: all visited, red: fire
-color_set = ['white', 'black', 'purple', 'blue', 'green']
-range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5])
+color_set = ['white', 'black', 'purple', 'blue', 'green', 'red']
+range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5])
 
 def main():
     dimension = int(sys.argv[1])
@@ -20,6 +21,7 @@ def main():
     plt.figure(figsize = (8, 8))
     plt.axis('off')
 
+    '''
     maze = generate_maze(dimension, density)
 
     status, astar_maze = astar(maze, (0, 0), (dimension - 1, dimension - 1))
@@ -37,6 +39,35 @@ def main():
     plt.savefig('dfs.jpg')
     plt.imshow(bfs_maze, cmap = cmap, norm = norm)
     plt.savefig('bfs.jpg')
+    '''
+    maze = generate_maze(dimension, density)
+    
+    start_time = time.time()
+    status, astar_maze = astar(maze, (0, 0), (dimension - 1, dimension - 1))
+    end_time = time.time()
+    print(status)
+    print(end_time - start_time)
+
+    start_time = time.time()
+    status, bfs_maze = bfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    end_time = time.time()
+    print(status)
+    print(end_time - start_time)
+
+    start_time = time.time()
+    status, dfs_maze = dfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    end_time = time.time()
+    print(status)
+    print(end_time - start_time)
+
+    plt.imshow(astar_maze, cmap = cmap, norm = norm)
+    plt.savefig('astar.jpg')
+
+    plt.imshow(bfs_maze, cmap = cmap, norm = norm)
+    plt.savefig('bfs_maze')
+
+    plt.imshow(dfs_maze, cmap = cmap, norm = norm)
+    plt.savefig('dfs_maze')
 
 def generate_maze(dimension, density):
     maze = np.zeros((dimension, dimension), int)

@@ -1,6 +1,7 @@
 import heapq
 import numpy as np
 
+
 def astar(maze, start, goal):
     maze_copy = np.copy(maze)
     dimension = maze_copy.shape[0]
@@ -8,7 +9,6 @@ def astar(maze, start, goal):
 
     heapq.heappush(fringe, (0 + euclidean_distance(start, goal), (start, 0)))
     
-    closed_set = []
     prev = {start : None}
 
     while len(fringe) != 0:
@@ -27,32 +27,30 @@ def astar(maze, start, goal):
         
         curX, curY = current
 
-        if curX + 1 < dimension and maze[curX + 1][curY] != 1 and (curX + 1, curY) not in closed_set:
-            if (euclidean_distance((curX + 1, curY), goal) + distance + 1, ((curX + 1, curY), 1 + distance)) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX + 1, curY), goal) + distance + 1, ((curX + 1, curY), 1 + distance)))
-                prev[(curX + 1, curY)] = current
+        if maze_copy[curX][curY] == 5:
+            continue
 
-        if curY + 1 < dimension and maze[curX][curY + 1] != 1 and (curX, curY + 1) not in closed_set:
-            if (euclidean_distance((curX, curY + 1), goal) + distance + 1, ((curX, curY + 1), 1 + distance)) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX, curY + 1), goal) + distance + 1, ((curX, curY + 1), 1 + distance)))
-                prev[(curX, curY + 1)] = current
+        if curX + 1 < dimension and maze_copy[curX + 1][curY] != 1 and maze_copy[curX + 1][curY] != 5:
+            heapq.heappush(fringe, (euclidean_distance((curX + 1, curY), goal) + distance + 1, ((curX + 1, curY), 1 + distance)))
+            prev[(curX + 1, curY)] = current
 
-        if curX - 1 >= 0 and maze[curX - 1][curY] != 1 and (curX - 1, curY) not in closed_set:
-            if (euclidean_distance((curX - 1, curY), goal) + distance + 1, ((curX - 1, curY), 1 + distance)) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX - 1, curY), goal) + distance + 1, ((curX - 1, curY), 1 + distance)))
-                prev[(curX - 1, curY)] = current
+        if curY + 1 < dimension and maze_copy[curX][curY + 1] != 1 and maze_copy[curX][curY + 1] != 5:
+            heapq.heappush(fringe, (euclidean_distance((curX, curY + 1), goal) + distance + 1, ((curX, curY + 1), 1 + distance)))
+            prev[(curX, curY + 1)] = current
+
+        if curX - 1 >= 0 and maze_copy[curX - 1][curY] != 1 and maze_copy[curX - 1][curY] != 5:
+            heapq.heappush(fringe, (euclidean_distance((curX - 1, curY), goal) + distance + 1, ((curX - 1, curY), 1 + distance)))
+            prev[(curX - 1, curY)] = current
         
-        if curY - 1 >= 0 and maze[curX][curY - 1] != 1 and (curX, curY - 1) not in closed_set:
-            if (euclidean_distance((curX, curY - 1), goal) + distance + 1, ((curX, curY - 1), 1 + distance)) not in fringe:
-                heapq.heappush(fringe, (euclidean_distance((curX, curY - 1), goal) + distance + 1, ((curX, curY - 1), 1 + distance)))
-                prev[(curX, curY - 1)] = current
+        if curY - 1 >= 0 and maze_copy[curX][curY - 1] != 1 and maze_copy[curX][curY - 1] != 5:
+            heapq.heappush(fringe, (euclidean_distance((curX, curY - 1), goal) + distance + 1, ((curX, curY - 1), 1 + distance)))
+            prev[(curX, curY - 1)] = current
         
-        closed_set.append(current)
-
         if current != start:
             maze_copy[curX][curY] = 5
     
     return 'Failure', maze_copy
+
 
 def euclidean_distance(point1, point2):
     x1, y1 = point1
