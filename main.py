@@ -61,7 +61,7 @@ def main():
     print(end_time - start_time)
 
     plt.imshow(astar_maze, cmap = cmap, norm = norm)
-    plt.savefig('astar.jpg')
+    plt.savefig('astar_maze.jpg')
 
     plt.imshow(bfs_maze, cmap = cmap, norm = norm)
     plt.savefig('bfs_maze')

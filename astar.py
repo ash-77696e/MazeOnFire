@@ -1,7 +1,6 @@
 import heapq
 import numpy as np
 
-
 def astar(maze, start, goal):
     maze_copy = np.copy(maze)
     dimension = maze_copy.shape[0]
@@ -50,7 +49,6 @@ def astar(maze, start, goal):
             maze_copy[curX][curY] = 5
     
     return 'Failure', maze_copy
-
 
 def euclidean_distance(point1, point2):
     x1, y1 = point1
