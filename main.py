@@ -7,12 +7,35 @@ from random import *
 from dfs import *
 from bfs import *
 from astar import *
+from fire import *
 
 ## white: free, black: wall, purple: start/goal, green: optimal path, blue: all visited, red: fire
 color_set = ['white', 'black', 'purple', 'blue', 'green', 'red']
 range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5])
 
 def main():
+    test_fire_strategies()
+
+def test_fire_strategies():
+    cmap = colors.ListedColormap(color_set)
+    norm = colors.BoundaryNorm(range_set, len(color_set))
+    plt.figure(figsize = (8, 8))
+    plt.axis('off')
+
+    dimension = int(sys.argv[1])
+    density = float(sys.argv[2])
+
+    maze = generate_maze(dimension, density)
+    fire_maze = init_fire(maze)
+
+    #print(maze)
+    #print(fire_maze)
+    fire_result = strategy_one(maze, fire_maze, (0, 0), (dimension - 1, dimension - 1), 0.3)
+
+    plt.imshow(fire_result, cmap = cmap, norm = norm)
+    plt.savefig('fire_strat1.jpg')
+
+def test_path_algorithms():
     dimension = int(sys.argv[1])
     density = float(sys.argv[2])
 
@@ -21,25 +44,6 @@ def main():
     plt.figure(figsize = (8, 8))
     plt.axis('off')
 
-    '''
-    maze = generate_maze(dimension, density)
-
-    status, astar_maze = astar(maze, (0, 0), (dimension - 1, dimension - 1))
-    print(status)
-
-    status, dfs_maze = dfs(maze, (0, 0), (dimension - 1, dimension - 1))
-    print(status)
-
-    status, bfs_maze = bfs(maze, (0, 0), (dimension - 1, dimension - 1))
-    print(status)
-
-    plt.imshow(astar_maze, cmap = cmap, norm = norm)
-    plt.savefig('astar.jpg')
-    plt.imshow(dfs_maze, cmap = cmap, norm = norm)
-    plt.savefig('dfs.jpg')
-    plt.imshow(bfs_maze, cmap = cmap, norm = norm)
-    plt.savefig('bfs.jpg')
-    '''
     maze = generate_maze(dimension, density)
     
     start_time = time.time()
@@ -82,5 +86,5 @@ def generate_maze(dimension, density):
                 maze[x][y] = 1 # fill with wall
 
     return maze
-# test
+
 main()
