@@ -18,8 +18,9 @@ def bfs(maze, start, goal):
                 parentX, parentY = parent
                 maze_copy[parentX][parentY] = 6
                 parent = prev[parent]
-            
-            return 'Success!', maze_copy
+
+            num_explored_nodes = explored_nodes(maze_copy)
+            return 'Success!', maze_copy, num_explored_nodes
         
         curX, curY = current
 
@@ -44,5 +45,18 @@ def bfs(maze, start, goal):
 
         if(current != start):
             maze_copy[curX][curY] = 5
-        
-    return 'No Solution', maze_copy    
+
+    num_explored_nodes = explored_nodes(maze_copy)    
+    return 'No Solution', maze_copy, num_explored_nodes   
+
+def explored_nodes(maze):
+    # count number of explored nodes
+    dimension = maze.shape[0]
+    num_explored_nodes = 0
+    for x in range(0, dimension):
+        for y in range(0, dimension):
+            if (x == 0 and y == 0) or (x == dimension - 1 and y == dimension - 1): #ignore start and goal
+                continue
+            if maze[x][y] == 5 or maze[x][y] == 6:
+                num_explored_nodes += 1
+    return num_explored_nodes    

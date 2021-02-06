@@ -14,7 +14,8 @@ color_set = ['white', 'black', 'purple', 'blue', 'green', 'red']
 range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5])
 
 def main():
-    test_fire_strategies()
+    #test_fire_strategies()
+    test_path_algorithms()
 
 def test_fire_strategies():
     cmap = colors.ListedColormap(color_set)
@@ -45,18 +46,26 @@ def test_path_algorithms():
     plt.axis('off')
 
     maze = generate_maze(dimension, density)
-    
-    start_time = time.time()
-    status, astar_maze = astar(maze, (0, 0), (dimension - 1, dimension - 1))
-    end_time = time.time()
-    print(status)
-    print(end_time - start_time)
+
+    prob_success = success_chance(dimension, density)
+    print('Probabilty S can be reached from G is: ' + str(prob_success))
+
+    diff_explored = difference_explored(dimension, density)
+    print('Average difference explored between BFS and A* is: ' + str(diff_explored))
 
     start_time = time.time()
-    status, bfs_maze = bfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    status, astar_maze, num_explored_nodes = astar(maze, (0, 0), (dimension - 1, dimension - 1))
     end_time = time.time()
     print(status)
     print(end_time - start_time)
+    print(num_explored_nodes)
+
+    start_time = time.time()
+    status, bfs_maze, num_explored_nodes = bfs(maze, (0, 0), (dimension - 1, dimension - 1))
+    end_time = time.time()
+    print(status)
+    print(end_time - start_time)
+    print(num_explored_nodes)
 
     start_time = time.time()
     status, dfs_maze = dfs(maze, (0, 0), (dimension - 1, dimension - 1))
@@ -87,4 +96,24 @@ def generate_maze(dimension, density):
 
     return maze
 
+def success_chance(dimension, density): # runs 100 trials per obstacle density and returns the chance a path can be found from S to G
+    num_success = 0
+    for i in range(0, 100):
+        maze_trial = generate_maze(dimension, density)
+        status, maze_copy = dfs(maze_trial, (0, 0), (dimension - 1, dimension - 1))
+        if status == 'Success':
+            num_success += 1
+
+    return (num_success / 100)
+
+def difference_explored(dimension, density):
+    total_difference = 0
+
+    for i in range(0, 100):
+        maze_trial = generate_maze(dimension, density)
+        status, maze_copy, num_explored_bfs = bfs(maze_trial, (0, 0), (dimension - 1, dimension - 1))
+        status, maze_copy, num_explored_astar = astar(maze_trial, (0, 0), (dimension - 1, dimension - 1))
+        total_difference += (num_explored_bfs - num_explored_astar)
+    
+    return (total_difference / 100)
 main()

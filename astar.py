@@ -22,7 +22,8 @@ def astar(maze, start, goal):
                 maze_copy[parentX][parentY] = 6
                 parent = prev[parent]
             
-            return 'Success', maze_copy
+            num_explored_nodes = explored_nodes(maze_copy)
+            return 'Success', maze_copy, num_explored_nodes
         
         curX, curY = current
 
@@ -48,10 +49,23 @@ def astar(maze, start, goal):
         if current != start:
             maze_copy[curX][curY] = 5
     
-    return 'Failure', maze_copy
+    num_explored_nodes = explored_nodes(maze_copy)
+    return 'Failure', maze_copy, num_explored_nodes
 
 def euclidean_distance(point1, point2):
     x1, y1 = point1
     x2, y2 = point2
 
     return np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))
+
+def explored_nodes(maze):
+    # count number of explored nodes
+    dimension = maze.shape[0]
+    num_explored_nodes = 0
+    for x in range(0, dimension):
+        for y in range(0, dimension):
+            if (x == 0 and y == 0) or (x == dimension - 1 and y == dimension - 1): #ignore start and goal
+                continue
+            if maze[x][y] == 5 or maze[x][y] == 6:
+                num_explored_nodes += 1
+    return num_explored_nodes    
