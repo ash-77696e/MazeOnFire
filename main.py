@@ -14,8 +14,8 @@ color_set = ['white', 'black', 'purple', 'blue', 'green', 'red']
 range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5])
 
 def main():
-    #test_fire_strategies()
-    test_path_algorithms()
+    test_fire_strategies()
+    #test_path_algorithms()
 
 def test_fire_strategies():
     cmap = colors.ListedColormap(color_set)
@@ -29,12 +29,17 @@ def test_fire_strategies():
     maze = generate_maze(dimension, density)
     fire_maze = init_fire(maze)
 
-    #print(maze)
-    #print(fire_maze)
-    fire_result = strategy_one(maze, fire_maze, (0, 0), (dimension - 1, dimension - 1), 0.3)
+    print(maze)
+    print(fire_maze)
+    #fire_result = strategy_one(maze, fire_maze, (0, 0), (dimension - 1, dimension - 1), 0.3)
+    fire_result2 =  strategy_two(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.3)
 
-    plt.imshow(fire_result, cmap = cmap, norm = norm)
-    plt.savefig('fire_strat1.jpg')
+
+    #plt.imshow(fire_result, cmap = cmap, norm = norm)
+    #plt.savefig('fire_strat1.jpg')
+
+    plt.imshow(fire_result2, cmap = cmap, norm = norm)
+    plt.savefig('fire_strat2.jpg')
 
 def test_path_algorithms():
     dimension = int(sys.argv[1])

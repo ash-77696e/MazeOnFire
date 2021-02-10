@@ -25,8 +25,7 @@ def advance_fire_one_step(maze, q):
                         k += 1
                 prob = 1 - (1 - q) ** k
                 if random() <= prob:
-                    if maze_copy[x][y] != 6:
-                        maze_copy[x][y] = 7
+                    maze_copy[x][y] = 7
     
     return maze_copy
 
@@ -46,7 +45,7 @@ def init_fire(maze):
 
 def strategy_one(maze, fire, start, goal, q):
     fire_maze = np.copy(fire)
-    status, traversal_path = bfs(fire_maze, start, goal)
+    status, traversal_path, num_explored_nodes = bfs(fire_maze, start, goal)
     if status == 'No Solution':
         print('No path possible')
         return fire_maze
@@ -78,5 +77,57 @@ def strategy_one(maze, fire, start, goal, q):
     print('Died')
     return fire_maze
 
+def strategy_two(maze, fire, start, goal, q):
+    fire_maze = np.copy(fire)
+    temp_maze = np.copy(fire)
+    dimension = maze.shape[0]
+    temp_start = start
+
+    curX = 0
+    curY = 0
+
+    while fire_maze[curX][curY] != 4: # goal
+        
+        if fire_maze[curX][curY] == 7:
+            print('Died')
+            return fire_maze
+
+        status, traversal_path, num_explored_nodes = bfs(temp_maze, temp_start, goal) 
+
+        if status == 'No Solution':
+            print('No path possible')
+            return fire_maze
+        
+        if curX + 1 < dimension and (traversal_path[curX + 1][curY] == 6 or traversal_path[curX + 1][curY] == 4):
+            curX = curX + 1
+        elif curY + 1 < dimension and (traversal_path[curX][curY + 1] == 6 or traversal_path[curX][curY + 1] == 4):
+            curY = curY + 1
+        elif curX - 1 >= 0 and (traversal_path[curX - 1][curY] == 6 or traversal_path[curX - 1][curY] == 4):
+            curX = curX - 1
+        elif curY - 1 >= 0 and (traversal_path[curX][curY - 1 ] == 6 or traversal_path[curX][curY - 1] == 4):
+            curY = curY - 1
+        
+        if fire_maze[curX][curY] == 4:
+            break
+
+        fire_maze[curX][curY] = 6
+        temp_start = (curX, curY)
+
+        fire_maze = advance_fire_one_step(fire_maze, q)
+        print (fire_maze)
+        temp_maze = reset_path(fire_maze, dimension) # avoid backtracking unless necessary
+
+    print('Escaped')
+    return fire_maze
+
+
+def reset_path(maze, dimension):
+    temp_maze = np.copy(maze)
+    for x in range(0, dimension):
+        for y in range(0, dimension):
+            if maze[x][y] == 6:
+                temp_maze[x][y] = 0
+    
+    return temp_maze
 
 

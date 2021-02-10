@@ -9,6 +9,9 @@ def bfs(maze, start, goal):
     fringe.append(start)
     prev = {start : None}
 
+    if start == goal:
+        return 'Start is goal', maze_copy, 1
+
     while len(fringe) != 0:
         current = fringe.pop(0)
 
