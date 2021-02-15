@@ -120,6 +120,62 @@ def strategy_two(maze, fire, start, goal, q):
     print('Escaped')
     return fire_maze
 
+def strategy_three (maze, fire, start, goal, q):
+    fire_maze = np.copy(maze)
+    dimensions = maze.shape[0]
+    probability_maze = init_probability_maze(fire_maze, dimensions)
+
+    curX = 0
+    curY = 0
+
+
+
+    while fire_maze[curX][curY] != 4:
+        if fire_maze[curX][curY] == 7:
+            print('Died')
+            return fire_maze
+        
+
+
+
+        probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, q)
+
+    print('Escaped')
+    return fire_maze
+
+def init_probability_maze (fire_maze, dimensions):
+    probability_maze = np.zeros((dimensions, dimensions))
+    for x in range(0, dimensions):
+        for y in range(0, dimensions):
+            if(fire_maze[x][y] == 7):
+                probability_maze[x][y] = 1
+    
+    return probability_maze
+
+def calculate_fire_probability(probability_maze, fire_maze, dimensions, q):
+    maze_copy = np.copy(probability_maze)
+    for x in range(0, dimensions):
+        for y in range(0, dimensions):
+            if fire_maze[x][y] == 7:
+                probability_maze[x][y] = 1
+
+            if(fire_maze[x][y] != 1 or fire_maze[x][y] != 3 or fire_maze[x][y] != 4 ):
+                k = 0
+                if x - 1 >= 0:
+                    if fire_maze[x - 1][y] == 7:
+                        k += 1
+                if x + 1 < dimensions:
+                    if fire_maze[x + 1][y] == 7:
+                        k += 1
+                if y - 1 >= 0:
+                    if fire_maze[x][y - 1] == 7:
+                        k += 1
+                if y + 1 < dimensions:
+                    if fire_maze[x][y + 1] == 7:
+                        k += 1
+                prob = 1 - (1 - q) ** k
+                probability_maze[x][y] = prob
+    return probability_maze
 
 def reset_path(maze, dimension):
     temp_maze = np.copy(maze)
