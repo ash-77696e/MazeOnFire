@@ -30,19 +30,19 @@ def bfs(maze, start, goal):
         if maze_copy[curX][curY] == 5:
             continue
 
-        if curX + 1 < dimension and maze[curX + 1][curY] != 1 and maze_copy[curX + 1][curY] != 5 and maze_copy[curX + 1][curY] != 7:
+        if curX + 1 < dimension and maze[curX + 1][curY] != 1 and maze_copy[curX + 1][curY] != 5 and maze_copy[curX + 1][curY] != 7 and maze_copy[curX + 1][curY] != 8:
             fringe.append((curX + 1, curY))
             prev[(curX + 1, curY)] = current
         
-        if curY + 1 < dimension and maze[curX][curY + 1] != 1 and maze_copy[curX][curY + 1] != 5 and maze_copy[curX][curY + 1] != 7:
+        if curY + 1 < dimension and maze[curX][curY + 1] != 1 and maze_copy[curX][curY + 1] != 5 and maze_copy[curX][curY + 1] != 7 and maze_copy[curX][curY + 1] != 8:
             fringe.append((curX, curY + 1))
             prev[(curX, curY + 1)] = current
 
-        if curX - 1 >= 0 and maze[curX - 1][curY] != 1 and maze_copy[curX - 1][curY] != 5 and maze_copy[curX - 1][curY] != 7:
+        if curX - 1 >= 0 and maze[curX - 1][curY] != 1 and maze_copy[curX - 1][curY] != 5 and maze_copy[curX - 1][curY] != 7 and maze_copy[curX - 1][curY] != 8 :
             fringe.append((curX - 1, curY))
             prev[(curX - 1, curY)] = current
 
-        if curY - 1 >= 0 and maze[curX][curY - 1] != 1 and maze_copy[curX][curY - 1] != 5 and maze_copy[curX][curY - 1] != 7:
+        if curY - 1 >= 0 and maze[curX][curY - 1] != 1 and maze_copy[curX][curY - 1] != 5 and maze_copy[curX][curY - 1] != 7 and maze_copy[curX][curY - 1] != 8 :
             fringe.append((curX, curY - 1))
             prev[(curX, curY - 1)] = current
 

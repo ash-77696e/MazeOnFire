@@ -10,8 +10,8 @@ from astar import *
 from fire import *
 
 ## white: free, black: wall, purple: start/goal, green: optimal path, blue: all visited, red: fire
-color_set = ['white', 'black', 'purple', 'blue', 'green', 'red']
-range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5])
+color_set = ['white', 'black', 'purple', 'blue', 'green', 'red', 'pink']
+range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5, 8.5])
 
 def main():
     test_fire_strategies()
@@ -32,14 +32,20 @@ def test_fire_strategies():
     print(maze)
     print(fire_maze)
     #fire_result = strategy_one(maze, fire_maze, (0, 0), (dimension - 1, dimension - 1), 0.3)
-    fire_result2 =  strategy_two(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.3)
+    #fire_result2 =  strategy_two(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.3)
+    fire_result3 =  strategy_three(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.2)
 
 
     #plt.imshow(fire_result, cmap = cmap, norm = norm)
     #plt.savefig('fire_strat1.jpg')
 
-    plt.imshow(fire_result2, cmap = cmap, norm = norm)
-    plt.savefig('fire_strat2.jpg')
+    #plt.imshow(fire_result2, cmap = cmap, norm = norm)
+    #plt.savefig('fire_strat2.jpg')
+
+    plt.imshow(fire_result3, cmap = cmap, norm = norm)
+    plt.savefig('fire_strat3.jpg')
+
+
 
 def test_path_algorithms():
     dimension = int(sys.argv[1])
