@@ -160,14 +160,16 @@ def strategy_three (maze, fire, start, goal, q):
             break
 
         probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, q)
-
+        print(probability_maze)
+        
         if random() <= (1 - probability_maze[curX][curY]): # probability that the cell will not be on fire
             fire_maze[curX][curY] = 6
             fire_maze = advance_fire_one_step(fire_maze, q)
-            print(fire_maze)
-            print('continue')
+            #print(fire_maze)
+            #print('continue')
             continue
-        else:
+        
+        if probability_maze[curX][curY] > 0:
             temp_start = (oldX, oldY)
             fire_maze[curX][curY] = 8 # avoided because of fire prediction
             curX, curY = oldX, oldY
@@ -177,8 +179,8 @@ def strategy_three (maze, fire, start, goal, q):
             if status == 'No Solution':
                 print('No path possible')
                 return fire_maze
-            print('find new path')
-            print(fire_maze)
+            #print('find new path')
+            #print(fire_maze)
 
     print('Escaped')
     return fire_maze
@@ -198,8 +200,7 @@ def calculate_fire_probability(probability_maze, fire_maze, dimensions, q):
         for y in range(0, dimensions):
             if fire_maze[x][y] == 7:
                 maze_copy[x][y] = 1
-
-            if(fire_maze[x][y] != 1 or fire_maze[x][y] != 3 or fire_maze[x][y] != 4 ):
+            elif (fire_maze[x][y] != 1 or fire_maze[x][y] != 3 or fire_maze[x][y] != 4 ):
                 k = 0
                 if x - 1 >= 0:
                     if fire_maze[x - 1][y] == 7:
