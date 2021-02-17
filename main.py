@@ -33,7 +33,8 @@ def test_fire_strategies():
     print(fire_maze)
     #fire_result = strategy_one(maze, fire_maze, (0, 0), (dimension - 1, dimension - 1), 0.3)
     #fire_result2 =  strategy_two(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.3)
-    fire_result3 =  strategy_three(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.2)
+    #status, bfs_result, num = bfs(fire_maze, (0, 0), (dimension - 1, dimension - 1))
+    fire_result3 =  strategy_three(maze, fire_maze, (0,0), (dimension - 1, dimension - 1), 0.3)
 
 
     #plt.imshow(fire_result, cmap = cmap, norm = norm)
@@ -41,6 +42,9 @@ def test_fire_strategies():
 
     #plt.imshow(fire_result2, cmap = cmap, norm = norm)
     #plt.savefig('fire_strat2.jpg')
+
+    #plt.imshow(bfs_result, cmap = cmap, norm = norm)
+    #plt.savefig('bfs_result.jpg')
 
     plt.imshow(fire_result3, cmap = cmap, norm = norm)
     plt.savefig('fire_strat3.jpg')

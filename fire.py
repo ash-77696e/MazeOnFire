@@ -119,9 +119,10 @@ def strategy_two(maze, fire, start, goal, q):
 
     print('Escaped')
     return fire_maze
-
+'''
 def strategy_three (maze, fire, start, goal, q):
     fire_maze = np.copy(fire)
+    future_fire_maze = np.copy(fire_maze)
     dimensions = maze.shape[0]
     probability_maze = init_probability_maze(fire_maze, dimensions)
 
@@ -135,8 +136,6 @@ def strategy_three (maze, fire, start, goal, q):
     if status == 'No Solution':
         print('No path possible')
         return fire_maze
-
-
 
     while fire_maze[curX][curY] != 4:
         if fire_maze[curX][curY] == 7:
@@ -162,14 +161,18 @@ def strategy_three (maze, fire, start, goal, q):
         probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, q)
         print(probability_maze)
         
-        if random() <= (1 - probability_maze[curX][curY]): # probability that the cell will not be on fire
+        #if random() <= (1 - probability_maze[curX][curY]): # probability that the cell will not be on fire
+        #    fire_maze[curX][curY] = 6
+        #    fire_maze = advance_fire_one_step(fire_maze, q)
+        #    #print(fire_maze)
+        #    #print('continue')
+        #    continue
+        
+        if probability_maze[curX][curY] == 0:
             fire_maze[curX][curY] = 6
             fire_maze = advance_fire_one_step(fire_maze, q)
-            #print(fire_maze)
-            #print('continue')
-            continue
-        
-        if probability_maze[curX][curY] > 0:
+            
+        elif probability_maze[curX][curY] >= 0:
             temp_start = (oldX, oldY)
             fire_maze[curX][curY] = 8 # avoided because of fire prediction
             curX, curY = oldX, oldY
@@ -184,6 +187,19 @@ def strategy_three (maze, fire, start, goal, q):
 
     print('Escaped')
     return fire_maze
+'''
+
+def strategy_three(maze, fire, start, goal, q):
+    dimensions = maze.shape[0]
+    fire_maze = np.copy(fire)
+
+    probability_maze = init_probability_maze(fire_maze, dimensions)
+    probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, 0.3, 3)
+    status, test_path = astar_fire(fire_maze, start, goal, probability_maze)
+    print(status)
+    print(probability_maze)
+    return test_path
+
 
 def init_probability_maze (fire_maze, dimensions):
     probability_maze = np.zeros((dimensions, dimensions))
@@ -194,13 +210,14 @@ def init_probability_maze (fire_maze, dimensions):
     
     return probability_maze
 
+'''
 def calculate_fire_probability(probability_maze, fire_maze, dimensions, q):
     maze_copy = np.copy(probability_maze)
     for x in range(0, dimensions):
         for y in range(0, dimensions):
             if fire_maze[x][y] == 7:
                 maze_copy[x][y] = 1
-            elif (fire_maze[x][y] != 1 or fire_maze[x][y] != 3 or fire_maze[x][y] != 4 ):
+            elif (fire_maze[x][y] != 1 or fire_maze[x][y] != 3 or fire_maze[x][y] != 4):
                 k = 0
                 if x - 1 >= 0:
                     if fire_maze[x - 1][y] == 7:
@@ -217,6 +234,33 @@ def calculate_fire_probability(probability_maze, fire_maze, dimensions, q):
                 prob = 1 - (1 - q) ** k
                 maze_copy[x][y] = prob
     return maze_copy
+'''
+
+def calculate_fire_probability(probability_maze, fire_maze, dimensions, q, n):
+    old_prob_maze = np.copy(probability_maze)
+    maze_result = np.zeros((dimensions, dimensions))
+    for i in range(n):
+        maze_result = np.zeros((dimensions, dimensions))
+        for x in range(0, dimensions):
+            for y in range(0, dimensions):
+                if fire_maze[x][y] == 7:
+                    maze_result[x][y] = 1
+                elif (fire_maze[x][y] != 1 or fire_maze[x][y] != 3 or fire_maze[x][y] != 4):
+                    k = 0
+                    if x - 1 >= 0:
+                        k += old_prob_maze[x - 1][y]
+                    if x + 1 < dimensions:
+                        k += old_prob_maze[x + 1][y]
+                    if y - 1 >= 0:
+                        k += old_prob_maze[x][y - 1]
+                    if y + 1 < dimensions:
+                        k += old_prob_maze[x][y + 1]
+                    prob = 1 - (1 - q) ** k
+                    maze_result[x][y] = prob
+            
+        old_prob_maze = np.copy(maze_result)
+    
+    return maze_result
 
 def reset_path(maze, dimension):
     temp_maze = np.copy(maze)
