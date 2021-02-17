@@ -41,6 +41,8 @@ def init_fire(maze):
     
     fire_maze[randX][randY] = 7
 
+    print(str(randX) + ','  + str(randY))
+
     return fire_maze
 
 def strategy_one(maze, fire, start, goal, q):
@@ -192,13 +194,55 @@ def strategy_three (maze, fire, start, goal, q):
 def strategy_three(maze, fire, start, goal, q):
     dimensions = maze.shape[0]
     fire_maze = np.copy(fire)
+    curX = 0
+    curY = 0
+    n = find_time_steps(start, goal)
 
     probability_maze = init_probability_maze(fire_maze, dimensions)
-    probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, 0.3, 3)
-    status, test_path = astar_fire(fire_maze, start, goal, probability_maze)
-    print(status)
-    print(probability_maze)
-    return test_path
+    probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, 0.3, n)
+    status, traversal_path = astar_fire(fire_maze, start, goal, probability_maze)
+
+    if status == 'No Solution':
+        print('No path possible')
+        return fire_maze
+
+    while fire_maze[curX][curY] != 4:
+
+        if fire_maze[curX][curY] == 7:
+            print('Died')
+            print(str(curX) + ', ' + str(curY))
+            return fire_maze
+
+
+        if curX + 1 < dimensions and (traversal_path[curX + 1][curY] == 6 or traversal_path[curX + 1][curY] == 4):
+            curX = curX + 1
+        elif curY + 1 < dimensions and (traversal_path[curX][curY + 1] == 6 or traversal_path[curX][curY + 1] == 4):
+            curY = curY + 1
+        elif curX - 1 >= 0 and (traversal_path[curX - 1][curY] == 6 or traversal_path[curX - 1][curY] == 4):
+            curX = curX - 1
+        elif curY - 1 >= 0 and (traversal_path[curX][curY - 1 ] == 6 or traversal_path[curX][curY - 1] == 4):
+            curY = curY - 1
+        
+        if fire_maze[curX][curY] == 4:
+            break
+        fire_maze[curX][curY] = 6
+        current = (curX, curY)
+        n = find_time_steps(current, goal)
+        fire_maze = advance_fire_one_step(fire_maze, q)   
+        temp_maze = reset_path(fire_maze, dimensions)
+        probability_maze = init_probability_maze(fire_maze, dimensions)
+        probability_maze = calculate_fire_probability(probability_maze, fire_maze, dimensions, q, n)
+        status, traversal_path = astar_fire(temp_maze, current, goal, probability_maze)
+
+        if status == 'No Solution':
+            print('No path Possible')
+            return fire_maze
+
+        #print(status)
+        #print(probability_maze)
+
+    print('Escaped')
+    return fire_maze
 
 
 def init_probability_maze (fire_maze, dimensions):
@@ -234,12 +278,12 @@ def calculate_fire_probability(probability_maze, fire_maze, dimensions, q):
                 prob = 1 - (1 - q) ** k
                 maze_copy[x][y] = prob
     return maze_copy
-'''
+''' 
 
 def calculate_fire_probability(probability_maze, fire_maze, dimensions, q, n):
     old_prob_maze = np.copy(probability_maze)
     maze_result = np.zeros((dimensions, dimensions))
-    for i in range(n):
+    for i in range(0, int(n)):
         maze_result = np.zeros((dimensions, dimensions))
         for x in range(0, dimensions):
             for y in range(0, dimensions):
@@ -271,4 +315,7 @@ def reset_path(maze, dimension):
     
     return temp_maze
 
+def find_time_steps(current, goal):
+    return np.ceil( euclidean_distance(current, goal) / 5 )
+   
 

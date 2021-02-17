@@ -59,12 +59,13 @@ def astar_fire(maze, start, goal, prob_maze):
 
     startX, startY = start
 
-    heapq.heappush(fringe, (prob_maze[startX][startY], start))
+    heapq.heappush(fringe, (0 + prob_maze[startX][startY], (start, 0)) ) 
 
     prev = {start : None}
 
     while len(fringe) != 0:
-        priority, current = heapq.heappop(fringe)
+        priority, item = heapq.heappop(fringe)
+        current, distance = item
 
         if current == goal:
             parent = prev[current]
@@ -79,21 +80,46 @@ def astar_fire(maze, start, goal, prob_maze):
 
         if maze_copy[curX][curY] == 5:
             continue
-            
+
+        prob_weight_factor = 0  
         if curY - 1 >= 0 and maze_copy[curX][curY - 1] != 1 and maze_copy[curX][curY - 1] != 5 and maze_copy[curX][curY - 1] != 7:
-            heapq.heappush(fringe, (prob_maze[curX][curY - 1], (curX, curY - 1)))
+            if prob_maze[curX][curY - 1] >= 0 and prob_maze[curX][curY - 1] < 0.3:
+                prob_weight_factor = (distance / 2)
+            elif prob_maze[curX][curY - 1] >= 0.3 and prob_maze[curX][curY - 1] < 0.6:
+                prob_weight_factor = distance
+            else:
+                prob_weight_factor = 2 * distance
+            heapq.heappush(fringe, ( distance + 1 + prob_weight_factor * prob_maze[curX][curY - 1], ((curX, curY - 1) , distance + 1)))
             prev[(curX, curY - 1)] = current
 
         if curX - 1 >= 0 and maze_copy[curX - 1][curY] != 1 and maze_copy[curX - 1][curY] != 5 and maze_copy[curX - 1][curY] != 7:
-            heapq.heappush(fringe, (prob_maze[curX - 1][curY], (curX - 1, curY)))
+            if prob_maze[curX - 1][curY] >= 0 and prob_maze[curX - 1][curY] < 0.3:
+                prob_weight_factor = (distance / 2)
+            elif prob_maze[curX - 1][curY] >= 0.3 and prob_maze[curX - 1][curY] < 0.6:
+                prob_weight_factor = distance
+            else:
+                prob_weight_factor = 2 * distance
+            heapq.heappush(fringe, ( distance + 1 + prob_weight_factor * prob_maze[curX - 1][curY], ((curX - 1, curY), distance + 1)))
             prev[(curX - 1, curY)] = current
         
         if curY + 1 < dimension and maze_copy[curX][curY + 1] != 1 and maze_copy[curX][curY + 1] != 5 and maze_copy[curX][curY + 1] != 7:
-            heapq.heappush(fringe, (prob_maze[curX][curY + 1], (curX, curY + 1)))
+            if prob_maze[curX][curY + 1] >= 0 and prob_maze[curX][curY + 1] < 0.3:
+                prob_weight_factor = (distance / 5)
+            elif prob_maze[curX][curY + 1] >= 0.3 and prob_maze[curX][curY + 1] < 0.6:
+                prob_weight_factor = distance
+            else:
+                prob_weight_factor = 2 * distance
+            heapq.heappush(fringe, ( distance + 1 + prob_weight_factor * prob_maze[curX][curY + 1], ((curX, curY + 1), distance + 1)))
             prev[(curX, curY + 1)] = current
 
         if curX + 1 < dimension and maze_copy[curX + 1][curY] != 1 and maze_copy[curX + 1][curY] != 5 and maze_copy[curX + 1][curY] != 7:
-            heapq.heappush(fringe, (prob_maze[curX + 1][curY], (curX + 1, curY)))
+            if prob_maze[curX + 1][curY] >= 0 and prob_maze[curX + 1][curY] < 0.3:
+                prob_weight_factor = (distance / 5)
+            elif prob_maze[curX + 1][curY] >= 0.3 and prob_maze[curX + 1][curY] < 0.6:
+                prob_weight_factor = distance
+            else:
+                prob_weight_factor = 2 * distance
+            heapq.heappush(fringe, ( distance + 1 + prob_weight_factor * prob_maze[curX + 1][curY], ((curX + 1, curY), distance + 1)))
             prev[(curX + 1, curY)] = current        
 
         if current != start:
