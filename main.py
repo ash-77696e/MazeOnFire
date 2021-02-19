@@ -104,12 +104,6 @@ def test_path_algorithms():
     plt.axis('off')
 
     maze = generate_maze(dimension, density)
-
-    #prob_success = success_chance(dimension, density)
-    #print('Probabilty S can be reached from G is: ' + str(prob_success))
-
-    #diff_explored = difference_explored(dimension, density)
-    #print('Average difference explored between BFS and A* is: ' + str(diff_explored))
     
     start_time = time.time()
     status, astar_maze, num_explored_nodes = astar(maze, (0, 0), (dimension - 1, dimension - 1))
@@ -142,8 +136,6 @@ def test_path_algorithms():
     plt.imshow(dfs_maze, cmap = cmap, norm = norm)
     plt.savefig('dfs_maze')
     
-    
-
 def generate_maze(dimension, density):
     maze = np.zeros((dimension, dimension), int)
     maze[0][0] = 3 # start
