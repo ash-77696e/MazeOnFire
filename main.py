@@ -22,6 +22,7 @@ range_set = np.array([-0.5, 0.5, 2.5, 4.5, 5.5, 6.5, 7.5, 8.5])
 
 """
 Main function where you can run the path-finding algorithms or fire strategies
+Uncomment the function you want to test and enter appropriate command line arguments
 """
 def main():
     #test_fire_strategies()
