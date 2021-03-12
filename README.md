@@ -1,2 +1,4 @@
 # MazeOnFire
-CS 440 Assignment 1
+Intro to AI (CS 440): Project 1 - Maze on Fire
+
+Prof. Cowan
